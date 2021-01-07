@@ -134,8 +134,10 @@ class Tuple:
                 break
             elif tokens[i].exact_type == tokenize.COMMA:
                 pass  # IGNORE
-            elif tokens[i].exact_type == tokenize.STRING:
-                self.values.append(tokens[i].string[1:-1])
+            elif tokens[i].exact_type in [tokenize.STRING, tokenize.NUMBER]:
+                self.values.append(
+                    {"value": tokens[i].string, "type": tokens[i].exact_type}
+                )
             i += 1
 
     @staticmethod
@@ -148,7 +150,10 @@ class Tuple:
     def generate_code(self):
         elements = ""
         for v in self.values:
-            elements = ",\n    ".join((elements, mp_qstr(v)))
+            if v["type"] == tokenize.STRING:
+                elements = ",\n    ".join((elements, mp_qstr(v["value"][1:-1])))
+            elif v["type"] == tokenize.NUMBER:
+                elements = ",\n    ".join((elements, mp_int(int(v["value"], 0))))
         return "STATIC MP_DEFINE_TUPLE({name}_tuple, {size}{elements});\n\n".format(
             name=self.name(), size=len(self.values), elements=elements
         )
