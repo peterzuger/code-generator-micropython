@@ -119,6 +119,12 @@ def constant_lookup(name, constants):
             return i.value
 
 
+def parse_failure(tokens):
+    for token in tokens:
+        print(token)
+    exit(1)
+
+
 class Tuple:
     counter = 0
 
@@ -138,6 +144,9 @@ class Tuple:
                 self.values.append(
                     {"value": tokens[i].string, "type": tokens[i].exact_type}
                 )
+            else:
+                print("--UNMATCHED TUPLE VALUE--")
+                parse_failure(tokens[i:])
             i += 1
 
     @staticmethod
@@ -183,9 +192,7 @@ class UnnamedDictionary:
                 pass  # IGNORE
             else:
                 print("--UNMATCHED UNNAMED DICT VALUE--")
-                for j in range(i, len(tokens)):
-                    print(tokens[j])
-                exit(1)
+                parse_failure(tokens[i:])
             i += 1
 
     @staticmethod
@@ -301,8 +308,7 @@ class Dictionary:
                 pass  # IGNORE
             else:
                 print("--UNMATCHED DICT VALUE--")
-                for j in range(i, i + 10):
-                    print(tokens[j])
+                parse_failure(tokens[i:])
             i += 1
 
     @staticmethod
