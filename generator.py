@@ -110,7 +110,7 @@ def mp_const_float_name(num):
 
 
 def mp_const_float(name, num):
-    return "const mp_obj_float_t {} = {{{{&mp_type_float}}, (mp_float_t){}}};".format(
+    return "const mp_obj_float_t {} = {{{{&mp_type_float}}, (mp_float_t){}}};\n".format(
         name, num
     )
 
@@ -140,6 +140,8 @@ def parse_failure(tokens):
 
 
 class Number:
+    floats = []
+
     def __init__(self, tokens):
         if "." in tokens[0].string:
             self.value = float(tokens[0].string)
@@ -153,7 +155,8 @@ class Number:
         return self._name
 
     def generate_code(self):
-        if self.is_float:
+        if self.is_float and self.value not in self.floats:
+            self.floats.append(self.value)
             return mp_const_float(self.name(), self.value)
         return ""
 
