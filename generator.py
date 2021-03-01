@@ -288,17 +288,21 @@ class DictionaryElement:
             self.value = Tuple(tokens[2:], self.name, constants)
             self.value_type = tokenize.LPAR
             self.len = 1 + self.value.length()
-        elif tokens[2].type == tokenize.NAME:
+        elif tokens[2].exact_type == tokenize.NAME:
             self.value = constant_lookup(tokens[2].string, constants)
-            self.value_type = tokenize.NUMBER
+            self.value_type = "const"
             self.len = 2
-        elif tokens[2].type == tokenize.STRING:
+        elif tokens[2].exact_type == tokenize.STRING:
             self.value = tokens[2].string[1:-1]
             self.value_type = tokenize.STRING
             self.len = 2
+        elif tokens[2].exact_type == tokenize.NUMBER:
+            self.value = Number(tokens[2:])
+            self.value_type = tokenize.NUMBER
+            self.len = 2
         else:
             self.value = tokens[2].string
-            self.value_type = tokens[2].type
+            self.value_type = tokens[2].exact_type
             self.len = 2
 
     @staticmethod
@@ -313,10 +317,9 @@ class DictionaryElement:
         return self.len
 
     def generate_code(self):
-        code = ""
-        if self.value_type in [tokenize.LBRACE, tokenize.LPAR]:
-            code = self.value.generate_code()
-        return code
+        if self.value_type in [tokenize.LBRACE, tokenize.LPAR, tokenize.NUMBER]:
+            return self.value.generate_code()
+        return ""
 
     def generate_rom_constant(self):
         if self.key_type == tokenize.NUMBER:
@@ -331,8 +334,10 @@ class DictionaryElement:
             value = mp_ptr(self.value.name() + "_dict")
         elif self.value_type == tokenize.LPAR:
             value = mp_ptr(self.value.name() + "_tuple")
-        elif self.value_type == tokenize.NUMBER:
+        elif self.value_type == "const":
             value = mp_int(int(self.value, 0))
+        elif self.value_type == tokenize.NUMBER:
+            value = self.value.generate_value()
         elif self.value_type == tokenize.STRING:
             value = mp_qstr(self.value)
 
