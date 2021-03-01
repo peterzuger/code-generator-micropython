@@ -416,7 +416,7 @@ class Variable:
     def __init__(self, tokens):
         self.name = tokens[0].string
         self.value = tokens[2].string
-        self.type = tokens[2].exact_type
+        self.value_type = tokens[2].exact_type
         self.len = 4
 
     @staticmethod
@@ -438,15 +438,15 @@ class Variable:
         return ""
 
     def generate_rom_constant(self):
-        if self.type == tokenize.NUMBER:
+        if self.value_type == tokenize.NUMBER:
             return mp_rom_int(self.name, self.value)
-        elif self.type == tokenize.STRING:
+        elif self.value_type == tokenize.STRING:
             return mp_rom_qstr(self.name, self.value)
 
 
 def remove_tokens(g, e):
     for y in g:
-        if not y.type in e:
+        if not y.exact_type in e:
             yield y
 
 
