@@ -189,10 +189,10 @@ class Tuple:
                 break
             elif tokens[i].exact_type == tokenize.COMMA:
                 pass  # IGNORE
-            elif tokens[i].exact_type in [tokenize.STRING, tokenize.NUMBER]:
-                self.values.append(
-                    {"value": tokens[i].string, "type": tokens[i].exact_type}
-                )
+            elif tokens[i].exact_type == tokenize.STRING:
+                self.values.append(String(tokens[i:]))
+            elif tokens[i].exact_type == tokenize.NUMBER:
+                self.values.append(Number(tokens[i:]))
             else:
                 print("--UNMATCHED TUPLE VALUE--")
                 parse_failure(tokens[i:])
@@ -206,14 +206,14 @@ class Tuple:
         return self.len
 
     def generate_code(self):
+        code = ""
+        for v in self.values:
+            code += v.generate_code()
         elements = ""
         for v in self.values:
-            if v["type"] == tokenize.STRING:
-                elements = ",\n    ".join((elements, mp_qstr(v["value"][1:-1])))
-            elif v["type"] == tokenize.NUMBER:
-                elements = ",\n    ".join((elements, mp_int(int(v["value"], 0))))
-        return "STATIC MP_DEFINE_TUPLE({name}_tuple, {size}{elements});\n\n".format(
-            name=self.name(), size=len(self.values), elements=elements
+            elements = ",\n    ".join((elements, v.generate_value()))
+        return "{code}\n\nSTATIC MP_DEFINE_TUPLE({name}_tuple, {size}{elements});\n\n".format(
+            code=code, name=self.name(), size=len(self.values), elements=elements
         )
 
     def name(self):
@@ -270,14 +270,14 @@ class UnnamedDictionary:
 class DictionaryElement:
     def __init__(self, tokens, name, constants):
         self.name = name
-        if tokens[0].type == tokenize.NAME:
+        if tokens[0].exact_type == tokenize.NAME:
             self.key_type = tokenize.NUMBER
             self.key = constant_lookup(tokens[0].string, constants)
-        elif tokens[0].type == tokenize.STRING:
+        elif tokens[0].exact_type == tokenize.STRING:
             self.key_type = tokenize.STRING
             self.key = tokens[0].string[1:-1]
         else:
-            self.key_type = tokens[0].type
+            self.key_type = tokens[0].exact_type
             self.key = tokens[0].string
 
         if tokens[2].exact_type == tokenize.LBRACE:
