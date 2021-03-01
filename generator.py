@@ -23,7 +23,7 @@ def clear_c_module(module_directory, module_name):
         rmdir(module_directory)
 
 
-def module_exists(module_directory, module_name):
+def module_exists_error():
     print("The module directory already exists.")
     print("call with --clear to overwrite existing files.")
     exit(1)
@@ -64,7 +64,7 @@ def create_c_module(module_directory, module_name, code, rom_table):
                         )
                     )
     except FileExistsError:
-        module_exists(module_directory, module_name)
+        module_exists_error()
 
 
 def mp_rom_ptr(name, value):
