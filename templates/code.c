@@ -10,6 +10,11 @@
  */
 #include "py/runtime.h"
 
+typedef struct _mp_obj_float_t{{
+    mp_obj_base_t base;
+    mp_float_t value;
+}}mp_obj_float_t;
+
 /**
  * This is an adaptation of MP_DEFINE_ATTRTUPLE and can be used to
  * define a constant tuple.
