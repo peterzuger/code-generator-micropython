@@ -101,6 +101,20 @@ def mp_int(num):
     return "MP_ROM_INT({})".format(num)
 
 
+def mp_float(name):
+    return mp_ptr(name)
+
+
+def mp_const_float_name(num):
+    return "mp_const_float_{}_obj".format(str(num).replace(".", "_"))
+
+
+def mp_const_float(name, num):
+    return "const mp_obj_float_t {} = {{{{&mp_type_float}}, (mp_float_t){}}};".format(
+        name, num
+    )
+
+
 def mp_ptr(ptr):
     return "MP_ROM_PTR(&{})".format(ptr)
 
@@ -123,6 +137,41 @@ def parse_failure(tokens):
     for token in tokens:
         print(token)
     exit(1)
+
+
+class Number:
+    def __init__(self, tokens):
+        if "." in tokens[0].string:
+            self.value = float(tokens[0].string)
+            self._name = mp_const_float_name(tokens[0].string)
+            self.is_float = True
+        else:
+            self.value = int(tokens[0].string)
+            self.is_float = False
+
+    def name(self):
+        return self._name
+
+    def generate_code(self):
+        if self.is_float:
+            return mp_const_float(self.name(), self.value)
+        return ""
+
+    def generate_value(self):
+        if self.is_float:
+            return mp_float(self.name())
+        return mp_int(self.value)
+
+
+class String:
+    def __init__(self, tokens):
+        self.value = tokens[0].string[1:-1]
+
+    def generate_code(self):
+        return ""
+
+    def generate_value(self):
+        return mp_qstr(self.value)
 
 
 class Tuple:
