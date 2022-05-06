@@ -503,7 +503,7 @@ def main():
             )
         )
         constants = []
-        dictionarys = []
+        dictionaries = []
 
         i = 0
         while i < len(tokens):
@@ -517,7 +517,7 @@ def main():
             elif Dictionary.match(tokens[i:]):
                 d = Dictionary(tokens[i:], constants)
                 i += d.length()
-                dictionarys.append(d)
+                dictionaries.append(d)
             else:
                 print(token.tok_name[tokens[i].exact_type], tokens[i].string)
             i += 1
@@ -528,7 +528,7 @@ def main():
             rom_table += i.generate_rom_constant()
         rom_table += "\n"
 
-        for i in dictionarys:
+        for i in dictionaries:
             code += i.generate_code()
             rom_table += i.generate_rom_constant()
 

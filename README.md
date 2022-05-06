@@ -71,7 +71,7 @@ follows:
 ```
 
 The generated module will be in the folder test. The module name will
-be "test" wich is taken from the basename of the provided file.
+be "test" which is taken from the basename of the provided file.
 
 They can also be specified on the commandline using `--directory` and
 `--modulename`.
