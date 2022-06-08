@@ -1,4 +1,4 @@
-<h2 align="center">Micropython code generator</h2>
+<h2 align="center">MicroPython code generator</h2>
 
 <p align="center">
 <a href="https://github.com/peterzuger/code-generator-micropython/blob/master/LICENSE"><img alt="License: MIT" src="https://img.shields.io/github/license/peterzuger/code-generator-micropython"></a>
@@ -14,7 +14,7 @@
 This is a code generator for
 [micropython](https://github.com/micropython/micropython).
 
-Micropython has multiple ways of including your code into an
+MicroPython has multiple ways of including your code into an
 application, one of those is so called frozen bytecode. See
 [this](https://docs.micropython.org/en/latest/reference/packages.html)
 for more info.
@@ -27,7 +27,7 @@ eat up a lot of the RAM available.
 This problem does not exist with
 [C-modules](https://docs.micropython.org/en/latest/develop/cmodules.html),
 since C modules are normal C code that gets integrated into the
-Micropython executable. They don't get loaded into RAM when they are
+MicroPython executable. They don't get loaded into RAM when they are
 imported in Python.
 
 But writing C modules for micropython dictionary's is very tedious,

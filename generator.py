@@ -459,7 +459,7 @@ def remove_tokens(g, e):
 
 
 def parse_arguments():
-    parser = argparse.ArgumentParser(description="Micropython C code generator")
+    parser = argparse.ArgumentParser(description="MicroPython C code generator")
 
     parser.add_argument(
         "-f", "--filename", type=str, required=True, help="Python file to parse"
