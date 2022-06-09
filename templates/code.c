@@ -10,6 +10,8 @@
  */
 #include "py/runtime.h"
 
+#if defined(MODULE_{module_name_u}_ENABLED) && MODULE_{module_name_u}_ENABLED
+
 typedef struct _mp_obj_float_t{{
     mp_obj_base_t base;
     mp_float_t value;
@@ -57,4 +59,6 @@ const mp_obj_module_t {module_name}_user_cmodule = {{
     .globals = (mp_obj_dict_t *)&{module_name}_module_globals,
 }};
 
-MP_REGISTER_MODULE(MP_QSTR_{module_name}, {module_name}_user_cmodule, MODULE_{module_name_u}_ENABLED);
+MP_REGISTER_MODULE(MP_QSTR_{module_name}, {module_name}_user_cmodule);
+
+#endif /* defined(MODULE_{module_name_u}_ENABLED) && MODULE_{module_name_u}_ENABLED */
