@@ -188,6 +188,8 @@ class Tuple:
         i = 1
         while i < len(tokens):
             if tokens[i].exact_type == tokenize.RPAR:
+                if len(self.values) == 1 and tokens[i - 1].exact_type != tokenize.COMMA:
+                    print("warning: treating (x) as 1 tuple")
                 self.len = 1 + i
                 break
             elif tokens[i].exact_type == tokenize.COMMA:
