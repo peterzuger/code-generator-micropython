@@ -48,11 +48,11 @@ typedef struct _mp_obj_float_t{{
 
 {generated_code}
 
-STATIC const mp_rom_map_elem_t {module_name}_module_globals_table[] = {{
+static const mp_rom_map_elem_t {module_name}_module_globals_table[] = {{
     {{ MP_ROM_QSTR(MP_QSTR___name__), MP_ROM_QSTR(MP_QSTR_{module_name}) }},
     {rom_table_entries}
 }};
-STATIC MP_DEFINE_CONST_DICT({module_name}_module_globals, {module_name}_module_globals_table);
+static MP_DEFINE_CONST_DICT({module_name}_module_globals, {module_name}_module_globals_table);
 
 const mp_obj_module_t {module_name}_user_cmodule = {{
     .base = {{ &mp_type_module }},

@@ -88,7 +88,7 @@ def mp_rom_qstr(name, value):
 
 
 def mp_dict(name, elements):
-    return "STATIC const mp_rom_map_elem_t {name}_dict_table[]={{{elements}\n}};\nSTATIC MP_DEFINE_DICT({name}_dict, {name}_dict_table);".format(
+    return "static const mp_rom_map_elem_t {name}_dict_table[]={{{elements}\n}};\nstatic MP_DEFINE_DICT({name}_dict, {name}_dict_table);".format(
         name=name, elements=elements
     )
 
@@ -215,7 +215,7 @@ class Tuple:
         elements = ""
         for v in self.values:
             elements = ",\n    ".join((elements, v.generate_value()))
-        return "{code}\n\nSTATIC MP_DEFINE_TUPLE({name}_tuple, {size}{elements});\n\n".format(
+        return "{code}\n\nstatic MP_DEFINE_TUPLE({name}_tuple, {size}{elements});\n\n".format(
             code=code, name=self.name(), size=len(self.values), elements=elements
         )
 
